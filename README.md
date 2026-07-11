@@ -25,7 +25,7 @@ Instead of comparing elements, VQ-Sort applies a statistical quantization proces
 
 ## Performance Benchmark
 
-Below is the performance comparison between **VQ-Sort** and a custom **in-place QuickSort** implementation. 
+Below is the performance comparison between **VQ-Sort** and a custom **in-place QuickSort** implementation.
 
 ### Benchmark Results
 Run on Node.js v24.12.0:
@@ -99,7 +99,7 @@ To contribute to or benchmark VQ-Sort locally:
 
 1. Clone the repository and install dev dependencies:
    ```bash
-   git clone https://github.com/your-username/vq-sort.git
+   git clone https://github.com/neon-x-hub/vq-sort.git
    cd vq-sort
    npm install
    ```
