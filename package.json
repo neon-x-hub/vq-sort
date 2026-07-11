@@ -1,0 +1,30 @@
+{
+  "name": "vq-sort",
+  "version": "1.0.0",
+  "description": "An ultra-fast approximate sort algorithm based on statistical centroid quantization.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "benchmark": "node benchmark/benchmark.js"
+  },
+  "keywords": [
+    "sort",
+    "approximate-sort",
+    "centroid-sort",
+    "bucket-sort",
+    "quantized-sort",
+    "fast-sort",
+    "performance"
+  ],
+  "author": "",
+  "license": "MIT"
+}
