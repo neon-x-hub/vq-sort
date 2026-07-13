@@ -4,10 +4,13 @@ An ultra-fast, approximate sorting algorithm for JavaScript based on statistical
 
 [![npm version](https://img.shields.io/npm/v/vq-sort.svg)](https://www.npmjs.com/package/vq-sort)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Interactive Demo](https://img.shields.io/badge/demo-interactive-blue.svg)](https://neon-x-hub.github.io/vq-sort/examples/)
 
 ## What is VQ-Sort?
 
-**VQ-Sort** is an $O(N)$ approximate sorting algorithm designed for scenarios where extreme speed is required and a small amount of local ordering error is acceptable. It is particularly effective for:
+**VQ-Sort** is an $O(N)$ approximate sorting algorithm designed for scenarios where extreme speed is required and a small amount of local ordering error is acceptable. You can see it in action in the [Interactive Visualization Demo](https://neon-x-hub.github.io/vq-sort/examples/).
+
+It is particularly effective for:
 - **Level of Detail (LOD) sorting** in 3D rendering and game engines.
 - **Particle system depth-sorting** where exact Z-sorting is not necessary.
 - **Rough statistical partition/percentile estimation** on massive datasets.
