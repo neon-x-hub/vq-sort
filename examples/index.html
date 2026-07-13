@@ -4,115 +4,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VQ-Sort vs Repository QuickSort</title>
+    <title>VQ-Sort vs QuickSort Visualization</title>
+    <!-- Use Outfit/Inter from Google Fonts for a premium look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #0c0c0e;
+            --panel-color: #16161a;
+            --border-color: #27272a;
+            --text-primary: #f4f4f5;
+            --text-secondary: #a1a1aa;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            background: #121214;
-            color: #e4e4e7;
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 40px 20px;
             margin: 0;
+            min-height: 100vh;
         }
 
         h1 {
-            color: #3b82f6;
+            color: var(--text-primary);
+            font-weight: 800;
             margin-bottom: 5px;
+            font-size: 2.5rem;
+            letter-spacing: -0.05em;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            font-weight: 300;
         }
 
         .controls {
-            margin: 15px 0;
+            margin-bottom: 30px;
             display: flex;
-            gap: 15px;
+            gap: 20px;
+            flex-wrap: wrap;
             align-items: center;
-            background: #18181b;
-            padding: 12px 20px;
-            border-radius: 8px;
-            border: 1px solid #27272a;
+            justify-content: center;
+            background: var(--panel-color);
+            padding: 16px 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
         }
 
         button {
-            background: #2563eb;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+            padding: 10px 24px;
+            border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
 
         button:hover {
-            background: #1d4ed8;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+        }
+
+        button:active {
+            transform: translateY(1px);
         }
 
         label {
-            font-size: 14px;
-            color: #a1a1aa;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         select,
         input {
-            background: #27272a;
+            background: #222227;
             color: white;
-            border: 1px solid #3f3f46;
-            padding: 8px;
-            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 8px;
+            outline: none;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: var(--accent-blue);
         }
 
         input {
-            width: 80px;
+            width: 90px;
             text-align: center;
         }
 
         .container {
             display: flex;
-            gap: 20px;
-            margin-top: 15px;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 1100px;
         }
 
         .panel {
             display: flex;
             flex-direction: column;
             align-items: center;
+            background: var(--panel-color);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            flex: 1;
+            min-width: 450px;
         }
 
         h3 {
-            margin-bottom: 8px;
-            color: #a1a1aa;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            font-weight: 600;
         }
 
         canvas {
             background: #09090b;
-            border: 1px solid #27272a;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            border: 1px solid #1f1f23;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 500px;
+            height: 350px;
         }
 
         .metrics-bar {
-            margin-top: 20px;
-            font-family: monospace;
-            background: #18181b;
-            padding: 15px 25px;
-            border-radius: 6px;
-            border: 1px solid #27272a;
-            font-size: 15px;
+            margin-top: 40px;
+            font-family: 'JetBrains Mono', monospace;
+            background: var(--panel-color);
+            padding: 20px 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            font-size: 0.95rem;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 30px;
+            gap: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 1050px;
+            box-sizing: border-box;
+        }
+
+        .metrics-row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            width: 100%;
+        }
+
+        .metric-item {
+            display: flex;
+            gap: 8px;
+        }
+
+        .metric-label {
+            color: var(--text-secondary);
         }
 
         .metric-val {
-            color: #10b981;
-            font-weight: bold;
+            color: var(--accent-green);
+            font-weight: 700;
         }
 
         .speedup {
-            color: #f59e0b;
-            font-weight: bold;
+            color: var(--accent-orange);
+            font-weight: 700;
+        }
+
+        #computedBucketsLabel {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-style: italic;
         }
     </style>
 </head>
@@ -120,55 +213,72 @@
 <body>
 
     <h1>VQ-Sort vs QuickSort</h1>
-    <p style="color: #a1a1aa; margin-top: 0;">Using the library's built-in benchmarking functions.</p>
+    <p class="subtitle">Real-time approximate sorting visualization using the density-based accuracy factor.</p>
 
     <div class="controls">
         <label for="dataSize">Data Size (N):</label>
         <input type="number" id="dataSize" value="3000" min="100" max="50000">
 
-        <label for="bucketSelect">Base Buckets:</label>
-        <select id="bucketSelect">
-            <option value="10">10 (Highly Approximate)</option>
-            <option value="50" selected>50 (Medium Accuracy)</option>
-            <option value="200">200 (High Accuracy)</option>
-            <option value="1000">1000 (Near Perfect)</option>
+        <label for="accuracySelect">Accuracy (Bucket Density):</label>
+        <select id="accuracySelect">
+            <option value="0.002">0.002 (Highly Approximate)</option>
+            <option value="0.01" selected>0.01 (Medium Accuracy)</option>
+            <option value="0.05">0.05 (High Accuracy)</option>
+            <option value="0.2">0.20 (Near Perfect)</option>
         </select>
+        <span id="computedBucketsLabel">(Computed Buckets: --)</span>
 
         <button id="runBtn">Run Comparison</button>
     </div>
 
     <div class="container">
         <div class="panel">
-            <h3>quickSort() (Exact)</h3>
+            <h3>quickSort() (Exact In-Place)</h3>
             <canvas id="qsCanvas" width="500" height="350"></canvas>
         </div>
         <div class="panel">
-            <h3>vqSort() (Approximate)</h3>
+            <h3>vqSort() (Approximate Centroid)</h3>
             <canvas id="vqCanvas" width="500" height="350"></canvas>
         </div>
     </div>
 
     <div class="metrics-bar">
-        <div class="time" style="display: flex; gap: 10px;">
-            <div>QuickSort Time: <span class="metric-val" id="qsTime">0 ms</span></div>
-            <div>VQ-Sort Time: <span class="metric-val" id="vqTime">0 ms</span></div>
-            <div>Speedup Factor: <span class="speedup" id="speedupVal">0x</span></div>
+        <div class="metrics-row">
+            <div class="metric-item">
+                <span class="metric-label">QuickSort Time:</span>
+                <span class="metric-val" id="qsTime">0 ms</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">VQ-Sort Time:</span>
+                <span class="metric-val" id="vqTime">0 ms</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">Speedup Factor:</span>
+                <span class="speedup" id="speedupVal">0x</span>
+            </div>
         </div>
-        <div class="recall" style="display: flex; gap: 10px;">
-            <div>VQ Macro Accuracy (F=0.3): <span class="metric-val" id="mRecall_3">0%</span></div>
-            <div>VQ Macro Accuracy (F=0.5): <span class="metric-val" id="mRecall_5">0%</span></div>
+        <div class="metrics-row" style="border-top: 1px solid #222227; padding-top: 15px;">
+            <div class="metric-item">
+                <span class="metric-label">VQ Recall (F=0.3):</span>
+                <span class="metric-val" id="mRecall_3">0%</span>
+            </div>
+            <div class="metric-item">
+                <span class="metric-label">VQ Recall (F=0.5):</span>
+                <span class="metric-val" id="mRecall_5">0%</span>
+            </div>
         </div>
     </div>
 
     <script type="module">
-        // Importing both sorting methods straight from the library bundle CDN
+        // Importing sorting methods from the library bundle CDN
         import { vqSort, quickSort, calculateForgivingRecall } from 'https://unpkg.com/vq-sort?module';
 
         const qsCanvas = document.getElementById('qsCanvas');
         const vqCanvas = document.getElementById('vqCanvas');
         const runBtn = document.getElementById('runBtn');
-        const bucketSelect = document.getElementById('bucketSelect');
+        const accuracySelect = document.getElementById('accuracySelect');
         const dataSizeInput = document.getElementById('dataSize');
+        const computedBucketsLabel = document.getElementById('computedBucketsLabel');
 
         function generateGaussianData(size) {
             const data = new Float64Array(size);
@@ -192,26 +302,28 @@
             const graphWidth = canvas.width - (padX * 2);
             const graphHeight = canvas.height - (padY * 2);
 
-            ctx.strokeStyle = '#27272a';
+            ctx.strokeStyle = '#222227';
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(padX, canvas.height - padY);
             ctx.lineTo(canvas.width - padX, canvas.height - padY);
             ctx.stroke();
 
-            for (let i = 0; i < arr.length; i++) {
-                const x = padX + (i / arr.length) * graphWidth;
+            const n = arr.length;
+            const radius = n > 5000 ? 0.8 : (n > 1000 ? 1.2 : 1.8);
+
+            for (let i = 0; i < n; i++) {
+                const x = padX + (i / n) * graphWidth;
                 const y = (canvas.height - padY) - (arr[i] / 100) * graphHeight;
 
                 if (colorMode === 'qs') {
-                    ctx.fillStyle = `hsl(${200 + (i / arr.length) * 40}, 85%, 60%)`;
+                    ctx.fillStyle = `hsl(${210 + (i / n) * 40}, 85%, 60%)`;
                 } else {
-                    const segment = Math.floor((i / arr.length) * baseBuckets);
+                    const segment = Math.floor((i / n) * baseBuckets);
                     ctx.fillStyle = segment % 2 === 0 ? '#3b82f6' : '#60a5fa';
                 }
 
                 ctx.beginPath();
-                const radius = arr.length > 10000 ? 0.8 : 1.8;
                 ctx.arc(x, y, radius, 0, Math.PI * 2);
                 ctx.fill();
             }
@@ -219,7 +331,11 @@
 
         function runComparison() {
             const N = Math.max(100, parseInt(dataSizeInput.value, 10) || 3000);
-            const baseBuckets = parseInt(bucketSelect.value, 10);
+            const accuracy = parseFloat(accuracySelect.value);
+
+            // Compute buckets dynamically
+            const baseBuckets = Math.max(2, Math.floor(N * accuracy));
+            computedBucketsLabel.innerText = `(Computed Buckets: ${baseBuckets})`;
 
             const rawData = generateGaussianData(N);
 
@@ -228,23 +344,20 @@
             const sortedQsArray = quickSort(rawData);
             const tQs1 = performance.now();
             const qsTime = tQs1 - tQs0;
-            console.log(`QuickSort Time: ${qsTime} ms`);
 
-            // --- 2. Benchmark Package VQ-Sort (Averaged Over 10 Iterations to prevent performance.now() zeroing) ---
+            // --- 2. Benchmark Package VQ-Sort (Averaged Over 10 Iterations) ---
             const ITERATIONS = 10;
             let totalVqTime = 0;
-            let sortedVqArray; // This will hold the final sorted result for rendering
+            let sortedVqArray; 
 
             for (let i = 0; i < ITERATIONS; i++) {
                 const tVq0 = performance.now();
-                sortedVqArray = vqSort(rawData, baseBuckets);
+                sortedVqArray = vqSort(rawData, accuracy);
                 const tVq1 = performance.now();
                 totalVqTime += (tVq1 - tVq0);
             }
 
-            // Compute the true mathematical average across all runs
             const vqTime = totalVqTime / ITERATIONS;
-            console.log(`VQ-Sort Time (Avg of ${ITERATIONS} runs): ${vqTime} ms`);
 
             // --- 3. Compute Metrics ---
             const avgBucketSize = N / baseBuckets;
@@ -253,17 +366,20 @@
             const speedup = qsTime / (vqTime || 0.001);
 
             // --- 4. Render Interfaces ---
-            document.getElementById('qsTime').innerText = `${qsTime.toFixed(5)} ms`;
-            document.getElementById('vqTime').innerText = `${vqTime.toFixed(5)} ms`;
+            document.getElementById('qsTime').innerText = `${qsTime.toFixed(4)} ms`;
+            document.getElementById('vqTime').innerText = `${vqTime.toFixed(4)} ms`;
             document.getElementById('speedupVal').innerText = `${speedup.toFixed(2)}x`;
-            document.getElementById('mRecall_5').innerText = `${(recall_5 * 100).toFixed(1)}%`;
-            document.getElementById('mRecall_3').innerText = `${(recall_3 * 100).toFixed(1)}%`;
+            document.getElementById('mRecall_5').innerText = `${(recall_5).toFixed(1)}%`;
+            document.getElementById('mRecall_3').innerText = `${(recall_3).toFixed(1)}%`;
 
             drawArray(qsCanvas, sortedQsArray, 'qs');
             drawArray(vqCanvas, sortedVqArray, 'vq', baseBuckets);
         }
 
         runBtn.addEventListener('click', runComparison);
+        accuracySelect.addEventListener('change', runComparison);
+        dataSizeInput.addEventListener('change', runComparison);
+        
         runComparison();
     </script>
 </body>
