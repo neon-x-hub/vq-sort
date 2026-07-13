@@ -41,6 +41,7 @@
             letter-spacing: -0.05em;
             background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -348,7 +349,7 @@
             // --- 2. Benchmark Package VQ-Sort (Averaged Over 10 Iterations) ---
             const ITERATIONS = 10;
             let totalVqTime = 0;
-            let sortedVqArray; 
+            let sortedVqArray;
 
             for (let i = 0; i < ITERATIONS; i++) {
                 const tVq0 = performance.now();
@@ -379,7 +380,7 @@
         runBtn.addEventListener('click', runComparison);
         accuracySelect.addEventListener('change', runComparison);
         dataSizeInput.addEventListener('change', runComparison);
-        
+
         runComparison();
     </script>
 </body>
