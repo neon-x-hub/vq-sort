@@ -1,6 +1,6 @@
 {
   "name": "vq-sort",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "An ultra-fast approximate sort algorithm based on statistical centroid quantization.",
   "type": "module",
   "main": "src/index.js",
