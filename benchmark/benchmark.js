@@ -2,11 +2,15 @@ import { performance } from 'perf_hooks';
 import { vqSort, calculateForgivingRecall } from '../src/vq-sort.js';
 import { quickSort } from '../src/quick-sort.js';
 
-// Setup benchmark configurations
+// Setup benchmark configurations using the new accuracy factor
+// We set accuracy factors that produce the target bucket counts:
+// - N = 100,000 and accuracy = 0.006  => 600 buckets
+// - N = 2,000,000 and accuracy = 0.0005 => 1000 buckets
+// - N = 5,000,000 and accuracy = 0.0003 => 1500 buckets
 const CONFIGS = [
-  { n: 100_000, maxBuckets: 600 },
-  { n: 2_000_000, maxBuckets: 1000 },
-  { n: 5_000_000, maxBuckets: 1500 }
+  { n: 100_000, accuracy: 0.006 },
+  { n: 2_000_000, accuracy: 0.0005 },
+  { n: 5_000_000, accuracy: 0.0003 }
 ];
 
 // Helper to format float arrays into display strings
@@ -48,11 +52,12 @@ function runBenchmark() {
   const results = [];
 
   for (const config of CONFIGS) {
-    const { n, maxBuckets } = config;
-    const avgBucketSize = n / maxBuckets;
+    const { n, accuracy } = config;
+    const computedBuckets = Math.max(2, Math.floor(n * accuracy));
+    const avgBucketSize = n / computedBuckets;
 
     console.log(`--------------------------------------------------------------------`);
-    console.log(`CONFIG: N = ${n.toLocaleString()} | Max Buckets = ${maxBuckets} (Avg Bucket Size = ${avgBucketSize.toFixed(1)})`);
+    console.log(`CONFIG: N = ${n.toLocaleString()} | Accuracy = ${accuracy} (Computed Buckets = ${computedBuckets})`);
     console.log(`--------------------------------------------------------------------`);
 
     console.log("Generating datasets...");
@@ -72,7 +77,7 @@ function runBenchmark() {
       // 2. Benchmark VQ-Sort
       const vqData = new Float64Array(dataset);
       const startVQ = performance.now();
-      const vqResult = vqSort(vqData, maxBuckets);
+      const vqResult = vqSort(vqData, accuracy);
       const endVQ = performance.now();
       const vqTime = endVQ - startVQ;
       console.log(`  [VQ-Sort]   Time : ${vqTime.toFixed(2)} ms`);
@@ -103,7 +108,8 @@ function runBenchmark() {
 
       results.push({
         n,
-        maxBuckets,
+        accuracy,
+        computedBuckets,
         distribution: distName,
         qsTime,
         vqTime,
@@ -121,19 +127,21 @@ function runBenchmark() {
   console.log(
     String("Data Size").padEnd(12) + 
     String("Distribution").padEnd(15) + 
+    String("Accuracy").padEnd(10) + 
     String("QuickSort (ms)").padEnd(16) + 
     String("VQ-Sort (ms)").padEnd(14) + 
     String("Speedup").padEnd(10) + 
     String("Recall (F=0.2)").padEnd(15) +
     String("Recall (F=0.5)")
   );
-  console.log("-".repeat(95));
+  console.log("-".repeat(105));
 
   for (const res of results) {
     const nStr = res.n >= 1_000_000 ? `${res.n / 1_000_000}M` : `${res.n / 1_000}k`;
     console.log(
       nStr.padEnd(12) +
       res.distribution.padEnd(15) +
+      res.accuracy.toString().padEnd(10) +
       res.qsTime.toFixed(1).padEnd(16) +
       res.vqTime.toFixed(1).padEnd(14) +
       `${res.speedup.toFixed(2)}x`.padEnd(10) +
