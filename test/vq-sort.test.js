@@ -23,13 +23,13 @@ test('vqSort empty and single element arrays', () => {
 test('vqSort all identical elements', () => {
   const input = [5, 5, 5, 5, 5];
   const expected = new Float64Array([5, 5, 5, 5, 5]);
-  const result = vqSort(input, 10);
+  const result = vqSort(input, 2.0); // 5 elements * 2.0 accuracy = 10 baseBuckets
   assert.deepStrictEqual(result, expected);
 });
 
 test('vqSort negative and positive numbers', () => {
   const input = [-10, 50, -3.5, 0, 100, 12.3];
-  const result = vqSort(input, 10);
+  const result = vqSort(input, 1.67); // 6 elements * 1.67 accuracy = 10 baseBuckets
   
   // Since VQ-Sort is approximate, let's verify that the output contains all elements
   assert.strictEqual(result.length, input.length);
@@ -49,11 +49,13 @@ test('vqSort approximate sort quality on larger array', () => {
     input[i] = Math.random() * 100;
   }
   
-  const result = vqSort(input, 100);
+  const accuracy = 0.1; // 100 baseBuckets / 1000 elements
+  const result = vqSort(input, accuracy);
   assert.strictEqual(result.length, n);
 
   // Forgiving recall at f=0.5 should be very high (typically >90%)
-  const avgBucketSize = n / 100; // 10
+  const baseBuckets = Math.max(2, Math.floor(n * accuracy));
+  const avgBucketSize = n / baseBuckets; // 10
   const recall = calculateForgivingRecall(result, 0.5, avgBucketSize);
   assert.ok(recall > 85, `Expected high forgiving recall (>85%), got ${recall}%`);
 });
