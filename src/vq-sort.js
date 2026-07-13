@@ -6,14 +6,17 @@
  * elements directly to destination buckets in O(1) time, then flattens the buckets.
  *
  * @param {ArrayLike<number>} arr - The array of numbers to approximately sort.
- * @param {number} [baseBuckets=1000] - The baseline bucket resolution. Higher values increase accuracy but may slightly reduce speed.
+ * @param {number} [accuracy=0.001] - The accuracy factor representing the bucket density relative to the array length.
+ *                                    For example, 0.001 means 1 bucket per 1000 elements.
  * @returns {Float64Array} A new Float64Array containing the approximately sorted elements.
  */
-export function vqSort(arr, baseBuckets = 1000) {
+export function vqSort(arr, accuracy = 0.001) {
   const n = arr.length;
   if (n <= 1) {
     return new Float64Array(arr);
   }
+
+  const baseBuckets = Math.max(2, Math.floor(n * accuracy));
 
   // Phase 1: Statistical Calibration (Sample Mean & Variance)
   const sampleSize = 1000;
